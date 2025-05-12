@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ post.author.username }} a publié un Ruz</h1>
+    <p><small class="text-muted">{{ post.timestamp.strftime('%d %b %Y, %H:%M') }}</small></p>
+
+    <!-- Contenu du post -->
+    <div class="mb-4">
+        <p>{{ post.content }}</p>
+    </div>
+
+    <!-- Formulaire pour commenter -->
+    <h3>Ajouter un commentaire</h3>
+    <form method="POST" action="{{ url_for('post.add_comment', post_id=post.id) }}">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            <label for="content" class="form-label">Votre commentaire</label>
+            <textarea class="form-control" id="content" name="content" rows="3" required>{{ form.content.data }}</textarea>
+            {% if form.content.errors %}
+                <div class="text-danger">
+                    {% for error in form.content.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter le commentaire</button>
+    </form>
+
+    <hr>
+
+    <!-- Liste des commentaires -->
+    <h3>Commentaires</h3>
+    {% if comments %}
+        <div class="list-group">
+            {% for comment in comments %}
+                <div class="list-group-item">
+                    <p><strong>{{ comment.author.username }}</strong> a commenté :</p>
+                    <p>{{ comment.content }}</p>
+                    <small class="text-muted">{{ comment.timestamp.strftime('%d %b %Y, %H:%M') }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun commentaire pour ce post.</p>
+    {% endif %}
+
+{% endblock %}

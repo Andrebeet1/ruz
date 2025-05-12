@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Bienvenue sur Ruz</h1>
+    <p>Voici les derniers ruz partagés par la communauté :</p>
+
+    <!-- Formulaire pour publier un nouveau ruz -->
+    <a href="{{ url_for('post.create_post') }}" class="btn btn-primary mb-4">Publier un Ruz</a>
+
+    <!-- Liste des posts récents -->
+    <div class="list-group">
+        {% for post in posts %}
+            <div class="list-group-item">
+                <!-- Auteur et date du post -->
+                <div class="d-flex justify-content-between">
+                    <h5>{{ post.author.username }} <small class="text-muted">{{ post.timestamp.strftime('%d %b %Y, %H:%M') }}</small></h5>
+                </div>
+
+                <!-- Contenu du post -->
+                <p>{{ post.content }}</p>
+
+                <!-- Boutons d'interaction : aimer et commenter -->
+                <div class="d-flex justify-content-start">
+                    <!-- Liker le post -->
+                    <form method="POST" action="{{ url_for('post.like_post', post_id=post.id) }}">
+                        <button type="submit" class="btn btn-outline-success me-2">Aimer</button>
+                    </form>
+
+                    <!-- Commenter le post -->
+                    <a href="{{ url_for('post.view_post', post_id=post.id) }}" class="btn btn-outline-primary">Commenter</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

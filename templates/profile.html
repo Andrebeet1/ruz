@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Profil de {{ user.username }}</h1>
+
+    <!-- Informations du profil -->
+    <div class="mb-4">
+        <h3>Nom d'utilisateur</h3>
+        <p>{{ user.username }}</p>
+
+        <h3>Email</h3>
+        <p>{{ user.email }}</p>
+
+        <h3>Publications récentes</h3>
+        {% if posts %}
+            <ul class="list-group">
+                {% for post in posts %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('post.detail', post_id=post.id) }}">{{ post.content[:50] }}...</a>
+                        <p><small class="text-muted">{{ post.timestamp.strftime('%d %b %Y, %H:%M') }}</small></p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucune publication récente.</p>
+        {% endif %}
+    </div>
+
+    <!-- Formulaire de modification du profil -->
+    <h2>Modifier mon profil</h2>
+    <form method="POST" action="{{ url_for('auth.update_profile') }}">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Nom d'utilisateur</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{ form.username.data }}" required>
+            {% if form.username.errors %}
+                <div class="text-danger">
+                    {% for error in form.username.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ form.email.data }}" required>
+            {% if form.email.errors %}
+                <div class="text-danger">
+                    {% for error in form.email.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Mettre à jour mon profil</button>
+    </form>
+{% endblock %}
