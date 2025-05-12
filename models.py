@@ -1,7 +1,6 @@
 from datetime import datetime
-from app import db
 from flask_login import UserMixin
-from app import login_manager
+from ruz import db, login_manager
 
 # Modèle pour l'utilisateur
 class User(UserMixin, db.Model):
@@ -21,22 +20,22 @@ def load_user(user_id):
 # Modèle pour un post (un "ruz")
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(280), nullable=False)  # Contenu du post
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)  # Date de création du post
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Lien vers l'utilisateur qui a posté
-    comments = db.relationship('Comment', backref='post', lazy='dynamic')  # Lien vers les commentaires
-    likes = db.relationship('Like', backref='post', lazy='dynamic')  # Lien vers les likes
+    body = db.Column(db.String(280), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    likes = db.relationship('Like', backref='post', lazy='dynamic')
 
 # Modèle pour un commentaire
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(280), nullable=False)  # Contenu du commentaire
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)  # Date du commentaire
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Lien vers l'utilisateur qui a commenté
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))  # Lien vers le post auquel le commentaire appartient
+    body = db.Column(db.String(280), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
 # Modèle pour un like
 class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Lien vers l'utilisateur qui a aimé
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))  # Lien vers le post qui a été aimé
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
