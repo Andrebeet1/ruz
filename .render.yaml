@@ -1,6 +1,13 @@
 services:
   - type: web
-    name: ruz-app
+    name: flask-app
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn run:app
+    envVars:
+      - key: FLASK_APP
+        value: run.py
+      - key: FLASK_ENV
+        value: production
+
