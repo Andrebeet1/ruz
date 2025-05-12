@@ -1,5 +1,6 @@
-from app import app
+from ruz import create_app
 
-if __name__ == "__main__":
-    # Lancer l'application en mode développement
+app = create_app()
+
+if __name__ == '__main__':
     app.run(debug=True)
